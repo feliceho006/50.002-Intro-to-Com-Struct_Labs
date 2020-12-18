@@ -1,0 +1,15 @@
+.include "./lab1checkoff.jsim"
+.include "./stdcell.jsim"
+.include "./nominal.jsim"
+
+.subckt inv22 a z
+MPD1 z a 0 0 NENH sw=16 sl=1
+MPU1 z a vdd vdd PENH sw=16 sl=1
+.ends
+
+.subckt F A B C Z
+Xnan A B x nand2
+Xinvv x f inv22
+Xorr f C z nor2
+Xinver z y inv22
+.ends

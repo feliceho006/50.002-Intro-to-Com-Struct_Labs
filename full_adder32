@@ -1,0 +1,34 @@
+
+
+.subckt adder32 ALUFN[0] A[31:0] B[31:0] s[31:0] z v n
+
+Xxxors B[31:0] ALUFN[0]#32 XB[31:0] xor2
+
+Xfadder A[0] XB[0] ALUFN[0] S[0] C[0] FA
+Xnadder A[31:1] XB[31:1] c[30:0] s[31:1] c[31:1] FA
+Xzero S[31:0] z zzeroo
+.connect n s[31]
+Xvee A[31] XB[31] S[31] v vee
+.ends
+
+//z
+.subckt zzeroo sum[31:0] outzero
+Xzadder sum[7:0] sum[15:8] sum[23:16] sum[31:24] w[7:0] nor4
+Xnzadder w[3:0] w[7:4] f[3:0] nand2
+Xfzadder f[3:2] f[1:0] outzero nor4
+.ends
+
+
+//v
+.subckt vee A_value B_value Sum_value outvee
+Xinver Sum_value Invert_Sum31 inverter
+Xfirstand A_value B_value Invert_Sum31 out1 and3
+
+Xinver3 A_value Invert_A31 inverter
+Xinver4 B_value Invert_B31 inverter
+
+Xfv1 Invert_A31 Invert_B31 Sum_value out2 and3
+
+Xorr out1 out2 outvee or2
+.ends
+

@@ -1,0 +1,23 @@
+.include ".\lab3checkoff_10.jsim"
+.include ".\stdcell.jsim"
+.include ".\nominal.jsim"
+.include ".\shifter_32.subckt"
+.include ".\full_adder32.subckt"
+.include ".\compare_32.subckt"
+.include ".\boolean_32.subckt"
+.include ".\full_adder.subckt"
+.include ".\multiplyer32.subckt"
+
+.subckt decide ALUFN[1:0] A[31:0] B[31:0] out[31:0] z v n
+Xadder32 ALUFN[0] A[31:0] B[31:0] adder[31:0] z v n adder32
+Xmultiplyer32 A[31:0] B[31:0] output[31:0] multiplyer32
+XMUX ALUFN[1]#32 adder[31:0] output[31:0] out[31:0] mux2
+.ends
+
+.subckt alu ALUFN[5:0] A[31:0] B[31:0] alu[31:0] z v n
+Xdecide ALUFN[1:0] A[31:0] B[31:0] out[31:0] z v n decide
+Xshift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0] shift32
+Xcompare32 ALUFN[2:1] z v n compare[31:0] compare32
+Xboolean32 ALUFN[3:0] A[31:0] B[31:0] bool[31:0] boole32
+Xmux4 ALUFN[4]#32 ALUFN[5]#32 out[31:0] bool[31:0] shift[31:0] compare[31:0] alu[31:0] mux4
+.ends

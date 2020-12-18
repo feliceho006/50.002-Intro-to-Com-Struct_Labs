@@ -1,0 +1,30 @@
+.include ".\nominal.jsim"
+
+.subckt nand2 a b z
+MPD1 z a 1 0 NENH sw=8 sl=1
+MPD2 1 b 0 0 NENH sw=8 sl=1
+MPU1 z a vdd vdd PENH sw=10 sl=1
+MPU2 z b vdd vdd PENH sw=10 sl=1
+.ends
+
+.subckt inv2 a z
+MPD1 z a 0 0 NENH sw=16 sl=1
+MPU1 z a vdd vdd PENH sw=16 sl=1
+.ends
+
+.subckt nor2 a b z
+MPU1 1 a vdd vdd PENH sw=10 sl=1
+MPU2 z b 1 vdd PENH sw=10 sl=1
+MPD1 z b 0 0 NENH sw=8 sl=1
+MPD2 z a 0 0 NENH sw=8 sl=1
+.ends
+
+.subckt xor2 a b z
+Xnorr a b p nor2
+MPU1 q a vdd vdd PENH sw=4 sl=1
+MPU2 z p q vdd PENH sw=4 sl=1 
+MPD1 z a r 0 NENH sw=2 sl=1
+MPD2 r b 0 0 NENH sw=2 sl=1
+MPU3 q b vdd vdd PENH sw=4 sl=1  
+MPD3 z p 0 0 NENH sw=2 sl=1
+.ends  

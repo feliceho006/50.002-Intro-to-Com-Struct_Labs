@@ -1,0 +1,6 @@
+.include ".\nominal.jsim"
+
+.subckt inv a z
+MPD1 z a 0 0 NENH sw=16 sl=1
+MPU1 z a vdd vdd PENH sw=16 sl=1
+.ends

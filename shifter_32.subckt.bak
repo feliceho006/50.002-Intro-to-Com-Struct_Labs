@@ -1,0 +1,33 @@
+.include ".\lab3shifter.jsim"
+.include ".\stdcell.jsim"
+//.include ".\nominal.jsim"
+//.include ".\full_adder.subckt"
+
+.subckt shift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0]
+Xsl A[31:0] B[4:0] shift_left[31:0] shift_left32
+Xsr ALUFN[1] A[31:0] B[4:0] shift_right[31:0] shift_right32
+
+Xchoose_mux2 ALUFN[0]#32 shift_left[31:0] shift_right[31:0] shift[31:0] mux2
+.ends
+
+
+.subckt shift_left32 A[31:0] B[4:0] shift_left[31:0]
+
+Xxmux4_2 B[4]#32 A[31:0] A[15:0] 0#16 W[31:0] mux2 
+Xxmux3_2 B[3]#32 W[31:0] W[23:0] 0#8 X[31:0] mux2 
+Xxmux2_2 B[2]#32 X[31:0] X[27:0] 0#4 Y[31:0] mux2 
+Xxmux1_2 B[1]#32 Y[31:0] Y[29:0] 0#2 Z[31:0] mux2 
+Xxmux0_2 B[0]#32 Z[31:0] Z[30:0] 0 shift_left[31:0] mux2 
+
+.ends
+
+.subckt shift_right32 ALUFN[1] A[31:0] B[4:0] shift_right[31:0]
+Xpad ALUFN[1] 0 A[31] pad mux2 
+
+Xxmux4_2 B[4]#32 A[31:0] pad#16 A[31:16] W[31:0] mux2 
+Xxmux3_2 B[3]#32 W[31:0] pad#8 W[31:8] X[31:0] mux2 
+Xxmux2_2 B[2]#32 X[31:0] pad#4 X[31:4] Y[31:0] mux2 
+Xxmux1_2 B[1]#32 Y[31:0] pad#2 Y[31:2] Z[31:0] mux2 
+Xxmux0_2 B[0]#32 Z[31:0] pad Z[31:1] shift_right[31:0] mux2 
+
+.ends

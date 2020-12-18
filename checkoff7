@@ -1,0 +1,142 @@
+.include ./beta.uasm
+.include ./lab7macros.uasm
+.include ./lab7checkoff.uasm
+
+||| Handler for opcode 1 extension:
+||| swapreg(RA,RC) swaps the contents of the two named registers.
+||| UASM defn = .macro swapreg(RA,RC) betaopc(0x01,RA,0,RC)
+
+regs:   RESERVE(32)                  | Array used to store register contents
+
+UI: 
+        save_all_regs(regs)
+ 
+        LD(xp,-4,r0)                          | r0 = illegal instruction
+        extract_field(r0, 31, 26, r1)   | extract opcode, bits 31:26
+        CMPEQC(r1,16,r2)             | OPCODE=1?
+        BT(r2, LDB)                    | yes, handle the swapreg instruction.
+	CMPEQC(r1,0x11,r2)
+	BT(r2, STB)
+        LD(r31,regs,r0)                     | It’s something else.  Restore regs
+        LD(r31,regs+4,r1)                 | we've used, and go to the system's
+        LD(r31,regs+8,r2)                 | Illegal Instruction handler.
+        BR(_IllegalInstruction)
+
+swapreg:
+        extract_field(r0, 25, 21, r1)   | extract rc field
+        MULC(r1, 4, r1)                    | convert to byte offset into regs array
+        extract_field(r0, 20, 16, r2)   | extract ra
+        MULC(r2, 4, r2)                    | convert to byte offset into regs array
+        LD(r1, regs, r3)                     | r3 <- regs[rc]
+        LD(r2, regs, r4)                     | r4 <- regs[ra]
+        ST(r4, regs, r1)                     | regs[rc] <- old regs[ra]
+        ST(r3, regs, r2)                     | regs[ra] <- old regs[rc]
+        
+        restore_all_regs(regs)
+        JMP(xp)
+
+LDB:
+        extract_field(r0, 20, 16, r1)   | extract ra
+	MULC(r1,4,r1) | convert to byte offset into regs array
+	ADDC(r1,regs,r1) | add SEXT(literal)
+	LD(r1,0,r1)	| load into reg 1
+
+	extract_field(r0,15,0,r2)  
+	SHLC(r2,16,r2)
+	SRAC(r2,16,r2)				
+		
+	ADD(r1,r2,r3)				
+	LD(r3,0,r4)
+				
+
+	extract_field(r3,1,0,r5)	
+	BEQ(r5,ldb_ea_0b00,r31) | if EA1:0 = 0b00 then MDATA7:0, if r5 == 00, branch but if not, -1 and compare again
+	SUBC(r5,1,r5)
+	BEQ(r5,ldb_ea_0b01,r31) |if EA1:0 = 0b01 then MDATA15:8
+	SUBC(r5,1,r5)
+	BEQ(r5,ldb_ea_0b10,r31) |if EA1:0 = 0b10 then MDATA23:16
+	SUBC(r5,1,r5)
+	BEQ(r5,ldb_ea_0b11,r31) |EA1:0 = 0b11 then MDATA31:24
+
+	ldb_ea_0b00:
+		extract_field(r4,7,0,r8) |MDATA7:0
+		BR(ldb_rc_assign)
+	ldb_ea_0b01:
+		extract_field(r4,15,8,r8) |MDATA15:8
+		BR(ldb_rc_assign)
+	ldb_ea_0b10:
+		extract_field(r4,23,16,r8) |MDATA23:16
+		BR(ldb_rc_assign)
+	ldb_ea_0b11:
+		extract_field(r4,31,24,r8) |MDATA31:24
+		BR(ldb_rc_assign)
+		
+	ldb_rc_assign:	|assign the Reg[Rc]31:8
+		extract_field(r0,25,21,r9)	
+		MULC(r9,4,r9)
+
+        ST(r8,regs,r9)		
+		
+		restore_all_regs(regs) |restore all the registers before going back to the code
+		JMP(xp) |go back
+
+STB:
+	extract_field(r0,20,16,r1)	| ra
+		MULC(r1,4,r1)
+		ADDC(r1,regs,r1)
+		LD(r1,0,r1)					
+        extract_field(r0,15,0,r2)   	|literal
+		SHLC(r2,16,r2)
+		SRAC(r2,16,r2)				
+		
+		ADD(r1,r2,r3)				
+		LD(r3,0,r4)
+
+	extract_field(r4,31,24,r13)
+	extract_field(r4,23,16,r12)	
+	extract_field(r4,15,8,r11)		
+	extract_field(r4,7,0,r10)
+	extract_field(r0,25,21,r8)	
+	MULC(r8,4,r8)
+	ADDC(r8,regs,r8)
+	LD(r8,0,r8)					
+	SHLC(r8,24,r8)
+	SHRC(r8,24,r8)		
+
+	extract_field(r3,1,0,r5)	
+	BEQ(r5,stb_ea_0b00,r31) | if EA1:0 = 0b00 then MDATA7:0, if r5 == 00, branch but if not, -1 and compare again
+	SUBC(r5,1,r5)
+	BEQ(r5,stb_ea_0b01,r31) |if EA1:0 = 0b01 then MDATA15:8
+	SUBC(r5,1,r5)
+	BEQ(r5,stb_ea_0b10,r31) |if EA1:0 = 0b10 then MDATA23:16
+	SUBC(r5,1,r5)
+	BEQ(r5,stb_ea_0b11,r31) |EA1:0 = 0b11 then MDATA31:24
+
+	stb_ea_0b00:
+		MOVE(r8,r10) |MDATA7:0
+		BR(stb_mem_assign)
+	stb_ea_0b01:
+		MOVE(r8,r11) |MDATA15:8
+		BR(stb_mem_assign)
+	stb_ea_0b10:
+		MOVE(r8,r12) |MDATA23:16
+		BR(stb_mem_assign)
+	stb_ea_0b11:
+		MOVE(r8,r13) |MDATA31:24
+		BR(stb_mem_assign)
+	
+	stb_mem_assign:
+		SHLC(r11,8,r11) |MDATA15:8
+		SHLC(r12,16,r12) |MDATA23:16
+		SHLC(r13,24,r13) |MDATA31:24 		
+		
+		ADD(r10,r11,r11) 
+		ADD(r12,r13,r12)
+		ADD(r11,r12,r12) |MDATA31:0 
+
+		ST(r12,0,r3)	|MDATA31:0 
+		
+	restore_all_regs(regs)
+        JMP(xp)
+IllegalInstruction:
+	HALT()

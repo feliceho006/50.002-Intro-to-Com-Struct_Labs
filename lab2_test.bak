@@ -1,0 +1,10 @@
+.include "./8clocks.jsim"
+.include "./nand2.subckt"
+
+
+Xtest clk1 clk2 clk3 z xor2
+.tran 40ns
+.plot clk1
+.plot clk2
+.plot clk3
+.plot z

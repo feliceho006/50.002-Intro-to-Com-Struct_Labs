@@ -1,0 +1,10 @@
+.include "D:\shoun\Desktop\50002\50002\nand2.subckt"
+Xtest vin vin vout nand2
+Vin vin 0 0v
+
+Vol vol 0 0.3v
+Voh voh 0 3v
+
+Vid output 0 pulse(0.3v 2.9v 0.2 0.2 0.2 1 4)
+.dc Vin 0 3.3 .005
+.plot vin vout voh vol

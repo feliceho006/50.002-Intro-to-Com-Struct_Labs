@@ -1,0 +1,38 @@
+.include "./nominal.jsim"
+.include "./stdcell.jsim"
+.include "./lab5basicblock.jsim"
+.include "./full_adder32.subckt"
+.include "./full_adder.subckt"
+.include "./pc_part1.subckt"
+.include "./ctl_part1.subckt"
+.include "./regfile_part1.subckt"
+.include "./shifter_32.subckt"
+.include "./compare_32.subckt"
+.include "./boolean_32.subckt"
+.include "./multiplyer32.subckt"
+
+.subckt decide ALUFN[1:0] A[31:0] B[31:0] out[31:0] z v n
+Xadder32 ALUFN[0] A[31:0] B[31:0] adder[31:0] z v n adder32
+Xmultiplyer32 A[31:0] B[31:0] output[31:0] multiplyer32
+XMUX ALUFN[1]#32 adder[31:0] output[31:0] out[31:0] mux2
+.ends
+
+.subckt alu ALUFN[5:0] A[31:0] B[31:0] alu[31:0] z v n
+Xdecide ALUFN[1:0] A[31:0] B[31:0] out[31:0] z v n decide
+Xshift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0] shift32
+Xcompare32 ALUFN[2:1] z v n compare[31:0] compare32
+Xboolean32 ALUFN[3:0] A[31:0] B[31:0] bool[31:0] boole32
+Xmux4 ALUFN[4]#32 ALUFN[5]#32 out[31:0] bool[31:0] shift[31:0] compare[31:0] alu[31:0] mux4
+.ends
+
+.subckt beta clk reset ia[31:0] id[31:0] ma[31:0] moe mrd[31:0] wr mwd[31:0]
+Xpc clk reset ia[31:0] pc
+Xregfile clk werf ra2sel id[20:16] id[15:11] id[25:21] wdata[31:0] radata[31:0] rbdata[31:0] regfile
+Xctl reset id[31:26] ra2sel bsel alufn[5:0] wdsel[1:0] werf moe wr ctl
+
+Xconnect rbdata[31:0] mwd[31:0] buffer
+Xbsel bsel#32 rbdata[31:0] id[15]#16 id[15:0] outb[31:0] mux2
+Xalu alufn[5:0] radata[31:0] outb[31:0] ma[31:0] z v n alu
+Xwdsel wdsel[0]#32 wdsel[1]#32 0#32 ma[31:0] mrd[31:0] 0#32 wdata[31:0] mux4
+
+.ends

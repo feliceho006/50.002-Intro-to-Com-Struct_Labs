@@ -1,0 +1,132 @@
+.include ".\beta.uasm"
+.include ".\lab6checkoff.uasm"
+
+count_bull_cows:         
+	PUSH(LP)	| enter the subroutine	 
+	PUSH(BP)
+	MOVE(SP, BP)
+
+    	PUSH(R0)  | result
+    	PUSH(R1)  | variable a
+    	PUSH(R2)  | variable b
+    	PUSH(R3)  | var mask
+    	PUSH(R4)  | var bulls
+    	PUSH(R5)  | var i
+    	PUSH(R6)  | temp var a&mask
+    	PUSH(R7)  | temp var b&mask 
+    	PUSH(R8)  | temp var a&mask == b&mask
+    	PUSH(R9)  | temp var check i < 4
+    	PUSH(R10) | var cows
+    	PUSH(R11) | var btry
+    	PUSH(R12) | var btemp
+    	PUSH(R13) | var atry 
+    	PUSH(R14) | temp var check j < 4
+    	PUSH(R15) | temp var check cmpeq
+    	PUSH(R16) | var j
+
+    	LD(BP, -12, R1)  | variable a
+    	LD(BP, -16, R2)  | variable b
+
+    	CMOVE(0, R4)    | bulls = 0
+    	CMOVE(0, R10)   | cows = 0
+    	CMOVE(0xF, R3)  | mask = 0xF
+    	CMOVE(0, R5)    | i = 0
+
+    count_bulls:
+        AND(R1, R3, R6)         | a & mask
+        AND(R2, R3, R7)         | b & mask
+        CMPEQ(R6, R7, R8)       | check if a&mask == b&mask 
+        BEQ(R8, if_equal, R31)  | if false, branch to if_equal
+        ADDC(R4, 1, R4)         | bulls += 1
+        OR(R1, R3, R1)          | a = a | mask
+        OR(R2, R3, R2)          | b = b | mask
+
+    
+        if_equal:
+            SHLC(R3, 4, R3)  | mask = mask << 4
+
+        ADDC(R5, 1, R5)
+        CMPLTC(R5, 4, R9)
+        BNE(R9, count_bulls, R31) | if R9 == 1, branch back to count_bulls
+
+    	CMOVE(0, R5)
+    	BR(count_cows)
+
+    compute_partial_cows_a:
+        ANDC(R1, 0xF, R13)            | atry = a & 0xF
+        SHRC(R1, 4, R1)               | a = a >> 4
+        CMPEQC(R13, 0xF, R15)         | check if atry != 0xF
+        BNE(R15, increase_i, R31)     | if atry == 0xF, directly return result 
+        ADDC(R2, 0, R12)              | btemp = b
+        CMOVE(0xF, R3)                | mask = 0xF
+        CMOVE(0, R16)                 | j = 0
+
+        compute_partial_cows:
+            ANDC(R12, 0xF, R11)            | btry = btemp & btemp 
+            SHRC(R12, 4, R12)              | a = a >> 4
+            CMPEQ(R11, R13, R15)           | check btry ==  atry
+            BEQ(R15, btry_not_equal, R31)  | if not equal, branch to btry_not_equal
+            ADDC(R10, 1, R10)              | cows += 1
+            OR(R2, R3, R2)                 | b = b | mask
+            BR(increase_i)                 | break loop, increase i
+
+    increase_i:
+        ADDC(R5, 1, R5)  | i += 1
+        BR(count_cows)   | branch to count_cows
+
+    btry_not_equal:
+        SHLC(R3, 4, R3)                      | mask = mask << 4
+        ADDC(R16, 1, R16)                    | j += 1
+        CMPLTC(R16, 4, R14)                  | check if j < 4
+        BNE(R14, compute_partial_cows, R31)  | if true, branch to compute_partial_cows
+        BR(increase_i)                       | else, increase i
+
+    count_cows:
+        CMPLTC(R5, 4, R9)                     | check if i < 4
+        BNE(R9, compute_partial_cows_a, R31)  | if true, branch to compute_partial_cows_a
+        BR(return_result)                     | else, return result
+
+    return_result: 
+        SHLC(R4, 4, R0) 
+        ADD(R0, R10, R0)
+
+| perimeter a     
+| perimeter b     
+| mask            
+| bulls           
+| i               
+| a&mask          
+| b&mask          
+| a&mask == b&mask
+| check i < 4     
+| cows            
+| btry            
+| btemp           
+| atry            
+| check j < 4     
+| check cmpeq     
+| j               
+
+    POP(R16) | check j < 4        
+    POP(R15) | atry     
+    POP(R14) | btemp     
+    POP(R13) | btry            
+    POP(R12) | cows           
+    POP(R11) | check i < 4                
+    POP(R10) | a&mask == b&mask          
+    POP(R9) | b&mask          
+    POP(R8) | a&mask
+    POP(R7) | i    
+    POP(R6) | bulls            
+    POP(R5) | mask            
+    POP(R3) | perimeter b           
+    POP(R2) | perimeter a 
+    POP(R1) | result  
+    
+	MOVE(BP,SP)        | standard subroutine exit sequence
+	POP(BP)
+	POP(LP)
+	RTN()
+
+StackBase: LONG(.+4)     | Pointer to bottom of stack
+	. = .+0x1000	 | Reserve space for stack...

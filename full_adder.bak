@@ -1,0 +1,59 @@
+.include ".\nominal.jsim"
+.include ".\lab2checkoff.jsim"
+
+.subckt nor2 a b z
+MPU1 1 a vdd vdd PENH sw=10 sl=1
+MPU2 z b 1 vdd PENH sw=10 sl=1
+MPD1 z b 0 0 NENH sw=8 sl=1
+MPD2 z a 0 0 NENH sw=8 sl=1
+.ends
+
+.subckt xor2 a b z
+Xnorr a b p nor2
+MPU1 q a vdd vdd PENH sw=4 sl=1
+MPU2 z p q vdd PENH sw=4 sl=1 
+MPD1 z a r 0 NENH sw=2 sl=1
+MPD2 r b 0 0 NENH sw=2 sl=1
+MPU3 q b vdd vdd PENH sw=4 sl=1  
+MPD3 z p 0 0 NENH sw=2 sl=1
+.ends
+
+.subckt nand2 a b z
+MPD1 z a 1 0 NENH sw=8 sl=1
+MPD2 1 b 0 0 NENH sw=8 sl=1
+MPU1 z a vdd vdd PENH sw=10 sl=1
+MPU2 z b vdd vdd PENH sw=10 sl=1
+.ends
+
+
+.subckt inv2 a z
+MPD1 z a 0 0 NENH sw=16 sl=1
+MPU1 z a vdd vdd PENH sw=16 sl=1
+.ends
+
+.subckt and2 a b z
+Xnann a b c nand2
+Xinvv c z inv2
+.ends
+
+.subckt or2 a b z
+Xnann a b c nor2
+Xinvv c z inv2
+.ends
+
+
+.subckt FA a b ci s co
+Xannd a b 1 nand2
+Xannd1 4 ci 2 nand2
+Xannd2 1 2 co nand3
+Xannd3
+Xxorr1 a b 4 xor2
+Xxorr2 4 ci s xor2
+.ends
+
+.subckt ADDER4 a3 a2 a1 a0 b3 b2 b1 b0 s4 s3 s2 s1 s0
+Xbit0 a0 b0 0 s0 c0 FA
+Xbit1 a1 b1 c0 s1 c1 FA
+Xbit2 a2 b2 c1 s2 c2 FA
+Xbit3 a3 b3 c2 s3 s4 FA
+.ends

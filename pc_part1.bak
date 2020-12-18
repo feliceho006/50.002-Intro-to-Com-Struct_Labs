@@ -1,0 +1,24 @@
+.include "./nominal.jsim"
+.include "./stdcell.jsim"
+.include "./lab5pc.jsim"
+.include "./full_adder32.subckt"
+.include "./full_adder.subckt"
+
+.subckt pc clk reset ia[31:0]
+.connect B[31:3] 0
+.connect B[1:0] 0
+.connect B[2] vdd
+
+Xmuxreset reset#32 Out[31:0] 0#32 d[31:0] mux2
+
+Xdff d[31:0] clk#32 ia[31:0] dreg
+
+X32adder 0 ia[31:0] b[31:0] Out[31:0] z v n adder32
+
+Xknect Q[31:0] ia[31:0] knect
+
+.ends
+
+.subckt knect a b 
+.connect a b
+.ends

@@ -1,0 +1,62 @@
+.subckt nor2 a b z
+MPU1 1 a vdd vdd PENH sw=10 sl=1
+MPU2 z b 1 vdd PENH sw=10 sl=1
+MPD1 z b 0 0 NENH sw=8 sl=1
+MPD2 z a 0 0 NENH sw=8 sl=1
+.ends
+
+.subckt xor2 a b z
+Xnorr a b p nor2
+MPU1 q a vdd vdd PENH sw=4 sl=1
+MPU2 z p q vdd PENH sw=4 sl=1 
+MPD1 z a r 0 NENH sw=2 sl=1
+MPD2 r b 0 0 NENH sw=2 sl=1
+MPU3 q b vdd vdd PENH sw=4 sl=1  
+MPD3 z p 0 0 NENH sw=2 sl=1
+.ends
+
+.subckt nand2 a b z
+MPD1 z a 1 0 NENH sw=8 sl=1
+MPD2 1 b 0 0 NENH sw=8 sl=1
+MPU1 z a vdd vdd PENH sw=10 sl=1
+MPU2 z b vdd vdd PENH sw=10 sl=1
+.ends
+
+
+.subckt nand3 a b c z
+MPD1 z a 1 0 NENH sw=8 sl=1
+MPD2 1 c 2 0 NENH sw=8 sl=1
+MPD3 2 b 0 0 NENH sw=8 sl=1
+
+MPU1 z a vdd vdd PENH sw=10 sl=1
+MPU2 z c vdd vdd PENH sw=10 sl=1
+MPU3 z b vdd vdd PENH sw=10 sl=1
+.ends
+
+.subckt FA a b ci s co
+Xannd a b 1 nand2
+Xannd1 a ci 2 nand2
+Xannd2 b ci 3 nand2
+Xannd3 1 2 3 co nand3
+Xxorr1 a b 4 xor2
+Xxorr2 4 ci s xor2
+.ends
+
+.subckt ADDER4 a3 a2 a1 a0 b3 b2 b1 b0 s4 s3 s2 s1 s0
+Xbit0 a0 b0 0 s0 c0 FA
+Xbit1 a1 b1 c0 s1 c1 FA
+Xbit2 a2 b2 c1 s2 c2 FA
+Xbit3 a3 b3 c2 s3 s4 FA
+.ends
+
+.subckt voo A_value B_value Sum_value outvee
+Xinver Sum_value Invert_Sum31 inverter
+Xfirstand A_value B_value Invert_Sum31 out1 and3
+
+Xinver3 A_value Invert_A31 inverter
+Xinver4 B_value Invert_B31 inverter
+
+Xfv1 Invert_A31 Invert_B31 Sum_value out2 and3
+
+Xorr out1 out2 outvee or2
+.ends

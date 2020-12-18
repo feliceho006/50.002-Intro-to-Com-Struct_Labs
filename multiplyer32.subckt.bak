@@ -1,0 +1,138 @@
+.subckt multiplyer32 A[31:0] B[31:0] alu[31:0]
+Xlayer0and2 A[31:0] B[0]#32 layer0out[31:0] and2 
+Xlayer1and2 A[30:0] B[1]#31 layer1out[30:0] and2 
+Xlayer2and2 A[29:0] B[2]#30 layer2out[29:0] and2 
+Xlayer3and2 A[28:0] B[3]#29 layer3out[28:0] and2 
+Xlayer4and2 A[27:0] B[4]#28 layer4out[27:0] and2 
+Xlayer5and2 A[26:0] B[5]#27 layer5out[26:0] and2 
+Xlayer6and2 A[25:0] B[6]#26 layer6out[25:0] and2 
+Xlayer7and2 A[24:0] B[7]#25 layer7out[24:0] and2 
+Xlayer8and2 A[23:0] B[8]#24 layer8out[23:0] and2 
+Xlayer9and2 A[22:0] B[9]#23 layer9out[22:0] and2 
+Xlayer10and2 A[21:0] B[10]#22 layer10out[21:0] and2 
+Xlayer11and2 A[20:0] B[11]#21 layer11out[20:0] and2 
+Xlayer12and2 A[19:0] B[12]#20 layer12out[19:0] and2 
+Xlayer13and2 A[18:0] B[13]#19 layer13out[18:0] and2 
+Xlayer14and2 A[17:0] B[14]#18 layer14out[17:0] and2 
+Xlayer15and2 A[16:0] B[15]#17 layer15out[16:0] and2 
+Xlayer16and2 A[15:0] B[16]#16 layer16out[15:0] and2 
+Xlayer17and2 A[14:0] B[17]#15 layer17out[14:0] and2 
+Xlayer18and2 A[13:0] B[18]#14 layer18out[13:0] and2 
+Xlayer19and2 A[12:0] B[19]#13 layer19out[12:0] and2 
+Xlayer20and2 A[11:0] B[20]#12 layer20out[11:0] and2 
+Xlayer21and2 A[10:0] B[21]#11 layer21out[10:0] and2 
+Xlayer22and2 A[9:0] B[22]#10 layer22out[9:0] and2 
+Xlayer23and2 A[8:0] B[23]#9 layer23out[8:0] and2 
+Xlayer24and2 A[7:0] B[24]#8 layer24out[7:0] and2 
+Xlayer25and2 A[6:0] B[25]#7 layer25out[6:0] and2 
+Xlayer26and2 A[5:0] B[26]#6 layer26out[5:0] and2 
+Xlayer27and2 A[4:0] B[27]#5 layer27out[4:0] and2 
+Xlayer28and2 A[3:0] B[28]#4 layer28out[3:0] and2 
+Xlayer29and2 A[2:0] B[29]#3 layer29out[2:0] and2 
+Xlayer30and2 A[1:0] B[30]#2 layer30out[1:0] and2 
+Xlayer31and2 A[0] B[31]#1 layer31out[0] and2 
+
+Xlayer0FA21 layer0out[1] layer1out[0] 0 s_0layer0 c_0layer0 FA
+Xlayer0FA22 layer0out[31:2] layer1out[30:1] c_0layer[29:0] s_0layer[30:1] c_0layer[30:1] FA
+
+Xlayer1FA21 s_0layer[1] layer2out[0] 0 s_1layer0 c_1layer0 FA
+Xlayer1FA22 s_0layer[30:2] layer2out[29:1] c_0layer[28:0] s_1layer[29:1] c_1layer[29:1] FA
+
+Xlayer2FA21 s_1layer[1] layer3out[0] 0 s_2layer0 c_2layer0 FA
+Xlayer2FA22 s_1layer[29:2] layer3out[28:1] c_1layer[27:0] s_2layer[28:1] c_2layer[28:1] FA
+
+
+Xlayer3FA21 s_2layer[1] layer4out[0] 0 s_3layer0 c_3layer0 FA
+Xlayer3FA22 s_2layer[28:2] layer4out[27:1] c_2layer[26:0] s_3layer[27:1] c_3layer[27:1] FA
+Xlayer4FA21 s_3layer[1] layer5out[0] 0 s_4layer0 c_4layer0 FA
+Xlayer4FA22 s_3layer[27:2] layer5out[26:1] c_3layer[25:0] s_4layer[26:1] c_4layer[26:1] FA
+Xlayer5FA21 s_4layer[1] layer6out[0] 0 s_5layer0 c_5layer0 FA
+Xlayer5FA22 s_4layer[26:2] layer6out[25:1] c_4layer[24:0] s_5layer[25:1] c_5layer[25:1] FA
+Xlayer6FA21 s_5layer[1] layer7out[0] 0 s_6layer0 c_6layer0 FA
+Xlayer6FA22 s_5layer[25:2] layer7out[24:1] c_5layer[23:0] s_6layer[24:1] c_6layer[24:1] FA
+Xlayer7FA21 s_6layer[1] layer8out[0] 0 s_7layer0 c_7layer0 FA
+Xlayer7FA22 s_6layer[24:2] layer8out[23:1] c_6layer[22:0] s_7layer[23:1] c_7layer[23:1] FA
+Xlayer8FA21 s_7layer[1] layer9out[0] 0 s_8layer0 c_8layer0 FA
+Xlayer8FA22 s_7layer[23:2] layer9out[22:1] c_7layer[21:0] s_8layer[22:1] c_8layer[22:1] FA
+Xlayer9FA21 s_8layer[1] layer10out[0] 0 s_9layer0 c_9layer0 FA
+Xlayer9FA22 s_8layer[22:2] layer10out[21:1] c_8layer[20:0] s_9layer[21:1] c_9layer[21:1] FA
+Xlayer10FA21 s_9layer[1] layer11out[0] 0 s_10layer0 c_10layer0 FA
+Xlayer10FA22 s_9layer[21:2] layer11out[20:1] c_9layer[19:0] s_10layer[20:1] c_10layer[20:1] FA
+Xlayer11FA21 s_10layer[1] layer12out[0] 0 s_11layer0 c_11layer0 FA
+Xlayer11FA22 s_10layer[20:2] layer12out[19:1] c_10layer[18:0] s_11layer[19:1] c_11layer[19:1] FA
+Xlayer12FA21 s_11layer[1] layer13out[0] 0 s_12layer0 c_12layer0 FA
+Xlayer12FA22 s_11layer[19:2] layer13out[18:1] c_11layer[17:0] s_12layer[18:1] c_12layer[18:1] FA
+Xlayer13FA21 s_12layer[1] layer14out[0] 0 s_13layer0 c_13layer0 FA
+Xlayer13FA22 s_12layer[18:2] layer14out[17:1] c_12layer[16:0] s_13layer[17:1] c_13layer[17:1] FA
+Xlayer14FA21 s_13layer[1] layer15out[0] 0 s_14layer0 c_14layer0 FA
+Xlayer14FA22 s_13layer[17:2] layer15out[16:1] c_13layer[15:0] s_14layer[16:1] c_14layer[16:1] FA
+Xlayer15FA21 s_14layer[1] layer16out[0] 0 s_15layer0 c_15layer0 FA
+Xlayer15FA22 s_14layer[16:2] layer16out[15:1] c_14layer[14:0] s_15layer[15:1] c_15layer[15:1] FA
+Xlayer16FA21 s_15layer[1] layer17out[0] 0 s_16layer0 c_16layer0 FA
+Xlayer16FA22 s_15layer[15:2] layer17out[14:1] c_15layer[13:0] s_16layer[14:1] c_16layer[14:1] FA
+Xlayer17FA21 s_16layer[1] layer18out[0] 0 s_17layer0 c_17layer0 FA
+Xlayer17FA22 s_16layer[14:2] layer18out[13:1] c_16layer[12:0] s_17layer[13:1] c_17layer[13:1] FA
+Xlayer18FA21 s_17layer[1] layer19out[0] 0 s_18layer0 c_18layer0 FA
+Xlayer18FA22 s_17layer[13:2] layer19out[12:1] c_17layer[11:0] s_18layer[12:1] c_18layer[12:1] FA
+Xlayer19FA21 s_18layer[1] layer20out[0] 0 s_19layer0 c_19layer0 FA
+Xlayer19FA22 s_18layer[12:2] layer20out[11:1] c_18layer[10:0] s_19layer[11:1] c_19layer[11:1] FA
+Xlayer20FA21 s_19layer[1] layer21out[0] 0 s_20layer0 c_20layer0 FA
+Xlayer20FA22 s_19layer[11:2] layer21out[10:1] c_19layer[9:0] s_20layer[10:1] c_20layer[10:1] FA
+Xlayer21FA21 s_20layer[1] layer22out[0] 0 s_21layer0 c_21layer0 FA
+Xlayer21FA22 s_20layer[10:2] layer22out[9:1] c_20layer[8:0] s_21layer[9:1] c_21layer[9:1] FA
+Xlayer22FA21 s_21layer[1] layer23out[0] 0 s_22layer0 c_22layer0 FA
+Xlayer22FA22 s_21layer[9:2] layer23out[8:1] c_21layer[7:0] s_22layer[8:1] c_22layer[8:1] FA
+Xlayer23FA21 s_22layer[1] layer24out[0] 0 s_23layer0 c_23layer0 FA
+Xlayer23FA22 s_22layer[8:2] layer24out[7:1] c_22layer[6:0] s_23layer[7:1] c_23layer[7:1] FA
+Xlayer24FA21 s_23layer[1] layer25out[0] 0 s_24layer0 c_24layer0 FA
+Xlayer24FA22 s_23layer[7:2] layer25out[6:1] c_23layer[5:0] s_24layer[6:1] c_24layer[6:1] FA
+Xlayer25FA21 s_24layer[1] layer26out[0] 0 s_25layer0 c_25layer0 FA
+Xlayer25FA22 s_24layer[6:2] layer26out[5:1] c_24layer[4:0] s_25layer[5:1] c_25layer[5:1] FA
+Xlayer26FA21 s_25layer[1] layer27out[0] 0 s_26layer0 c_26layer0 FA
+Xlayer26FA22 s_25layer[5:2] layer27out[4:1] c_25layer[3:0] s_26layer[4:1] c_26layer[4:1] FA
+Xlayer27FA21 s_26layer[1] layer28out[0] 0 s_27layer0 c_27layer0 FA
+Xlayer27FA22 s_26layer[4:2] layer28out[3:1] c_26layer[2:0] s_27layer[3:1] c_27layer[3:1] FA
+Xlayer28FA21 s_27layer[1] layer29out[0] 0 s_28layer0 c_28layer0 FA
+Xlayer28FA22 s_27layer[3:2] layer29out[2:1] c_27layer[1:0] s_28layer[2:1] c_28layer[2:1] FA
+
+Xlayer29FA21 s_28layer[1] layer30out[0] 0 s_29layer0 c_29layer0 FA
+Xlayer29FA22 s_28layer[2] layer30out[1] c_28layer[0] s_29layer[1] c_29layer[1] FA
+
+Xlayer30FA21 s_29layer[1] layer31out[0] 0 s_30layer0 c_30layer0 FA
+
+.connect alu0 layer0out[0]
+.connect alu1 s_0layer0
+.connect alu2 s_1layer0
+.connect alu3 s_2layer0
+.connect alu4 s_3layer0
+.connect alu5 s_4layer0
+.connect alu6 s_5layer0
+.connect alu7 s_6layer0
+.connect alu8 s_7layer0
+.connect alu9 s_8layer0
+.connect alu10 s_9layer0
+.connect alu11 s_10layer0
+.connect alu12 s_11layer0
+.connect alu13 s_12layer0
+.connect alu14 s_13layer0
+.connect alu15 s_14layer0
+.connect alu16 s_15layer0
+.connect alu17 s_16layer0
+.connect alu18 s_17layer0
+.connect alu19 s_18layer0
+.connect alu20 s_19layer0
+.connect alu21 s_20layer0
+.connect alu22 s_21layer0
+.connect alu23 s_22layer0
+.connect alu24 s_23layer0
+.connect alu25 s_24layer0
+.connect alu26 s_25layer0
+.connect alu27 s_26layer0
+.connect alu28 s_27layer0
+.connect alu29 s_28layer0
+.connect alu30 s_29layer0
+.connect alu31 s_30layer0
+
+
+.ends
+

@@ -1,0 +1,11 @@
+.subckt compare32 ALUFN[2:1] z v n cmp[31:0]
+.connect cmp[31:1] 0
+Xxxor2 v n xorout xor2
+Xxxand2 z xorout orout or2
+
+Xxxmux4 ALUFN[1] ALUFN[2] 0 z xorout orout cmp[0] mux4
+
+
+
+
+.ends

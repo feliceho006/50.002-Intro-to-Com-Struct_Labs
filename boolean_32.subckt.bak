@@ -1,0 +1,10 @@
+.include ".\lab3boolean.jsim"
+.include ".\stdcell.jsim"
+//.include ".\nominal.jsim"
+//.include ".\full_adder.subckt"
+
+.subckt boole32 ALUFN[3:0] A[31:0] B[31:0] boole[31:0]
+Xxxmux32_4 A[31:0] B[31:0] ALUFN[0]#32 ALUFN[1]#32 ALUFN[2]#32 ALUFN[3]#32 boole[31:0] mux4
+
+
+.ends

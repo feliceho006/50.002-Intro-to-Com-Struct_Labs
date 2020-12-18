@@ -1,0 +1,22 @@
+.include "./nominal.jsim"
+.include "./stdcell.jsim"
+.include "./lab5regfile.jsim"
+
+.subckt regfile clk werf ra2sel ra[4:0] rb[4:0] rc[4:0] wdata[31:0] radata[31:0] rbdata[31:0]
+Xra2sel ra2sel#5 rb[4:0] rc[4:0] ra2mux[4:0] mux2
+Xmem vdd 0 0 ra[4:0] adata[31:0] vdd 0 0 ra2mux[4:0] bdata[31:0] 0 clk werf rc[4:0] wdata[31:0] $memory width=32 nlocations=31
+
+Xand4a ra[0] ra[1] ra[2] ra[3] outa1 and4
+Xand2a outa1 ra[4] outa and2
+
+
+Xand4b ra2mux[0] ra2mux[1] ra2mux[2] ra2mux[3] outb1 and4
+Xand2b outb1 ra2mux[4] outb and2
+
+Xmuxa outa#32 adata[31:0] 0#32 radata[31:0] mux2
+
+Xmuxb outb#32 bdata[31:0] 0#32 rbdata[31:0] mux2 
+
+.ends
+
+
